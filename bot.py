@@ -1,5 +1,9 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from urllib.request import urlopen as uReq
+from bs4 import BeautifulSoup as soup
+
+
 
 URL = 'https://playvalorant.com/en-us/news/'
 client = commands.Bot(command_prefix = '.')
@@ -8,8 +12,10 @@ client = commands.Bot(command_prefix = '.')
 async def on_ready():
 	print('Bot is ready')
 
-def get_news():
-		request = Request("https://playvalorant.com/en-us/news/", headers={'User-Agent': 'Mozilla/5.0'})
+
+@task.loop(seconds = 60)
+async def function():
+	pass
 
 
 client.run('NzMzMTg4MjUzNTIzNjQwMzMx.Xw_ogg.mhTZ5JPsjfP16ds48f-CTqfYt-M')
