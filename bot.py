@@ -18,7 +18,7 @@ links = page_soup.findAll('a',{"href" : True})
 	
 
 
-client = commands.Bot(command_prefix = '.')
+client = commands.Bot(command_prefix = '!')
 
 def getDate():
 	storedDate = []
@@ -30,28 +30,36 @@ def getDate():
 
 @client.event
 async def on_ready():
-	print('Bot is ready')
+	print('Bot')
+	await channel.send('hey')
+	
+
+@client.command()
+async def hello(ctx, arg):
+	await ctx.send(arg)
+
+@tasks.loop(seconds = 10)
+async def runtime_background_task():
+	new = True
+	while true:
+		print('Bot is ready')
+		container = containers[0]
+		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+		date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+		link = container.find('a', {"href" : True})
+
+		if len(title) > 0:
+			await channel.send(title)
+			print(title)
+			print(f'	{date}')
+			print(f'	{description}\n')	
+			if 'href' in link.attrs:		
+				print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+
+		#getDate()
 
 
-@task.loop(seconds = 60)
-async def on_ready():	
-	container = containers[0]
-	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-	link = container.find('a', {"href" : True})
-
-	if len(title) > 0:
-		
-		print(title)
-		print(f'	{date}')
-		print(f'	{description}\n')	
-		if 'href' in link.attrs:		
-			print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
-
-	getDate()
 
 
-
-
-client.run('NzMzMTg4MjUzNTIzNjQwMzMx.Xw_ogg.mhTZ5JPsjfP16ds48f-CTqfYt-M')
+client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxFVVg.w1TqagJXOVi7avdJJEkFtuVVQwY')

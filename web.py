@@ -25,23 +25,26 @@ def getDate():
 
 	return storedDate
 
-def scrape():		
+def scrape():
+	new = True
+					
 	container = containers[0]
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 	link = container.find('a', {"href" : True})
 
-	if len(title) > 0:
+	if len(title) > 0 and new:
 		
 		print(title)
 		print(f'	{date}')
 		print(f'	{description}\n')	
 		if 'href' in link.attrs:		
 			print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
-
-	getDate()
-
+	if date in getDate():
+		new = False
 	
-scrape()
 
+
+
+scrape()
