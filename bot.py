@@ -152,4 +152,4 @@ async def quit(ctx):
 client.loop.create_task(autoNews())
 
 
-client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxJpdw.NMgq3F7CAXaQMG85bgNHvYWKAKw')
+client.run('')
