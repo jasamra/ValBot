@@ -26,6 +26,10 @@ def storedDates():
 
 	return storedDate
 
+def PrevDates():
+	container = containers[0]
+	datePrev = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+	return datePrev
 
 def patch():
 	patchTitles = []
@@ -59,7 +63,7 @@ def patch():
 
 def scrape():
 	
-					
+
 	container = containers[0]
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
@@ -78,4 +82,4 @@ def scrape():
 
 
 #scrape()
-patch()
+#patch()

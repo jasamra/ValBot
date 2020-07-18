@@ -3,6 +3,9 @@ from discord.ext import commands, tasks
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import sys
+import asyncio
+
+
 my_url = 'https://playvalorant.com/en-us/news/'
 #opening connection/grabbing the page
 uClient = uReq(my_url)
@@ -21,25 +24,55 @@ links = page_soup.findAll('a',{"href" : True})
 
 client = commands.Bot(command_prefix = '!')
 
-def getDate():
-	storedDate = []
-	for container in containers:
-		
-		storedDate.append(container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip())
+container = containers[0]
 
-	return storedDate
 
 @client.event
 async def on_ready():
 	print('Bot')
+	
+	
+#@tasks.loop(seconds = 1)
+#	await client.wait_until_ready()
+	#counter = 0
+	#channel = client.get_channel(733192141756694602)
+#	while not client.is_closed():
+	#	counter += 1
+	#	await channel.send(counter)
+	#	await asyncio.sleep(10)
+	
+
+
+async def autoNews():
+	await client.wait_until_ready()
+	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+	link = container.find('a', {"href" : True})
+	channel = client.get_channel(733192141756694602)
+	while(True):
+		prevTitle = title
+
+		if prevTitle != container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
+
+			if len(title) > 0:
+				await channel.send(title)
+				#print(title)
+				await channel.send(date)
+				#print(f'	{date}')
+				await channel.send(description)
+				#print(f'	{description}\n')	
+				if 'href' in link.attrs:
+
+					await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
+				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+		await asyncio.sleep(60)
 
 @client.event
 async def on_message(message):
-	
 		
-		#await message.channel.send('yes')
-
-	container = containers[0]
+	#await message.channel.send('yes')
+	
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
@@ -89,7 +122,10 @@ async def on_message(message):
 		if 'href' in linksP[0].attrs:
 			await message.channel.send(f"https://playvalorant.com{str(linksP[0].attrs['href'])}")		
 			#print(f"https://playvalorant.com{str(linksP[0].attrs['href'])} \n")
-	
+
+#@tasks.loop(seconds = 10)
+#async def check_for_news():	
+
 	
 
 @client.command()
@@ -99,16 +135,10 @@ async def quit(ctx):
 #async def hello(ctx, arg):
 #	await ctx.send(arg)
 
-#@tasks.loop(seconds = 10)
-#async def runtime_background_task():
-	#new = True
-	#while true:
-		#print('Bot is ready')
+
 	
 
-		#getDate()
+client.loop.create_task(autoNews())
 
 
-
-
-client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxFVVg.w1TqagJXOVi7avdJJEkFtuVVQwY')
+client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxJpdw.NMgq3F7CAXaQMG85bgNHvYWKAKw')
