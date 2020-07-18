@@ -17,16 +17,48 @@ links = page_soup.findAll('a',{"href" : True})
 	
 #for container in containers:
 
-def getDate():
+def storedDates():
 	storedDate = []
 	for container in containers:
-		
-		storedDate.append(container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip())
+		dates = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+		storedDate.append(dates)
+
 
 	return storedDate
 
+
+def patch():
+	patchTitles = []
+	descriptionP = []
+	datesP = []
+	linksP = []
+	
+	for contain in containers:
+		patch = contain.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+	#	print (patch)
+		desP = contain.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+		dateP = contain.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+		linkP = contain.find('a', {"href" : True})
+
+		if patch.startswith('VALORANT Patch Notes'):
+			patchTitles.append(patch)
+			descriptionP.append(desP)
+			datesP.append(dateP)
+			linksP.append(linkP)
+
+
+	
+	#if len(patchTitles[0]) > 0:
+		
+	print(patchTitles[0])
+	print(f'	{datesP[0]}')
+	print(f'	{[descriptionP[0]]}\n')	
+	if 'href' in linksP[0].attrs:		
+		print(f"https://playvalorant.com{str(linksP[0].attrs['href'])} \n")
+	
+
 def scrape():
-	new = True
+	
 					
 	container = containers[0]
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
@@ -34,17 +66,16 @@ def scrape():
 	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 	link = container.find('a', {"href" : True})
 
-	if len(title) > 0 and new:
+	if len(title) > 0:
 		
 		print(title)
 		print(f'	{date}')
 		print(f'	{description}\n')	
 		if 'href' in link.attrs:		
 			print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
-	if date in getDate():
-		new = False
 	
 
 
 
-scrape()
+#scrape()
+patch()

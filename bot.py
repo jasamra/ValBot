@@ -35,16 +35,19 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-	if message.content =='!news':
+	
 		
 		#await message.channel.send('yes')
 
-		container = containers[0]
-		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-		date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-		link = container.find('a', {"href" : True})
+	container = containers[0]
+	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+	link = container.find('a', {"href" : True})
 
+
+
+	if message.content =='!news':
 		if len(title) > 0:
 			await message.channel.send(title)
 			#print(title)
@@ -56,6 +59,37 @@ async def on_message(message):
 
 				await message.channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+
+	if message.content == '!patch':
+
+		patchTitles = []
+		descriptionP = []
+		datesP = []
+		linksP = []
+	
+		for contain in containers:
+			patch = contain.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+		#	print (patch)
+			desP = contain.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+			dateP = contain.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+			linkP = contain.find('a', {"href" : True})
+
+			if patch.startswith('VALORANT Patch Notes'):
+				patchTitles.append(patch)
+				descriptionP.append(desP)
+				datesP.append(dateP)
+				linksP.append(linkP)
+
+		#print(patchTitles[0])
+		await message.channel.send(patchTitles[0])
+		#print(f'	{datesP[0]}')
+		await message.channel.send(datesP[0])
+		#print(f'	{[descriptionP[0]]}\n')	
+		await message.channel.send(descriptionP[0])
+		if 'href' in linksP[0].attrs:
+			await message.channel.send(f"https://playvalorant.com{str(linksP[0].attrs['href'])}")		
+			#print(f"https://playvalorant.com{str(linksP[0].attrs['href'])} \n")
+	
 	
 
 @client.command()
@@ -77,4 +111,4 @@ async def quit(ctx):
 
 
 
-client.run('')
+client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxFVVg.w1TqagJXOVi7avdJJEkFtuVVQwY')
