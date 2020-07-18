@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, tasks
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import sys
 my_url = 'https://playvalorant.com/en-us/news/'
 #opening connection/grabbing the page
 uClient = uReq(my_url)
@@ -31,18 +32,13 @@ def getDate():
 @client.event
 async def on_ready():
 	print('Bot')
-	await channel.send('hey')
-	
 
-@client.command()
-async def hello(ctx, arg):
-	await ctx.send(arg)
+@client.event
+async def on_message(message):
+	if message.content =='!news':
+		
+		#await message.channel.send('yes')
 
-@tasks.loop(seconds = 10)
-async def runtime_background_task():
-	new = True
-	while true:
-		print('Bot is ready')
 		container = containers[0]
 		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
@@ -50,16 +46,35 @@ async def runtime_background_task():
 		link = container.find('a', {"href" : True})
 
 		if len(title) > 0:
-			await channel.send(title)
-			print(title)
-			print(f'	{date}')
-			print(f'	{description}\n')	
-			if 'href' in link.attrs:		
-				print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+			await message.channel.send(title)
+			#print(title)
+			await message.channel.send(date)
+			#print(f'	{date}')
+			await message.channel.send(description)
+			#print(f'	{description}\n')	
+			if 'href' in link.attrs:
+
+				await message.channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
+				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+	
+
+@client.command()
+async def quit(ctx):
+    sys.exit()
+#@client.command()
+#async def hello(ctx, arg):
+#	await ctx.send(arg)
+
+#@tasks.loop(seconds = 10)
+#async def runtime_background_task():
+	#new = True
+	#while true:
+		#print('Bot is ready')
+	
 
 		#getDate()
 
 
 
 
-client.run('NzMzMTg4MjUzNTIzNjQwMzMx.XxFVVg.w1TqagJXOVi7avdJJEkFtuVVQwY')
+client.run('')
