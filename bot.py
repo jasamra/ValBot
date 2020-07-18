@@ -50,10 +50,17 @@ async def autoNews():
 	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 	link = container.find('a', {"href" : True})
 	channel = client.get_channel(733918383803727922)
+
 	while(True):
 		prevTitle = title
 
 		if prevTitle != container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
+
+			title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+			description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+			date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+			link = container.find('a', {"href" : True})
+			prevTitle = title
 
 			if len(title) > 0:
 				await channel.send(title)
@@ -66,6 +73,10 @@ async def autoNews():
 
 					await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+
+
+
+
 		await asyncio.sleep(60)
 
 @client.event
