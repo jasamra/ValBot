@@ -49,7 +49,7 @@ async def autoNews():
 	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 	link = container.find('a', {"href" : True})
-	channel = client.get_channel(733192141756694602)
+	channel = client.get_channel(733918383803727922)
 	while(True):
 		prevTitle = title
 
