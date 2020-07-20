@@ -45,21 +45,24 @@ async def on_ready():
 
 async def autoNews():
 	await client.wait_until_ready()
-	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-	link = container.find('a', {"href" : True})
+	cont = containers[1]
+
+	title = cont.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+	description = cont.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+	date = cont.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+	link = cont.find('a', {"href" : True})
 	channel = client.get_channel(733918383803727922)
-
+	prevTitle = title
 	while(True):
-		prevTitle = title
+		newContainer = containers[0]
 
-		if prevTitle != container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
-
-			title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-			description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-			date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-			link = container.find('a', {"href" : True})
+		#await channel.send('error2')
+		if prevTitle != newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
+		#await channel.send('error1')
+			title = newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+			description = newContainer.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+			date = newContainer.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+			link = newContainer.find('a', {"href" : True})
 			prevTitle = title
 
 			if len(title) > 0:
@@ -72,26 +75,28 @@ async def autoNews():
 				if 'href' in link.attrs:
 
 					await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
-				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+					#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
 
 
 
-		await asyncio.sleep(60)
+		await asyncio.sleep(10)
 
 @client.event
 async def on_message(message):
 		
 	#await message.channel.send('yes')
-	
-	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-	description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-	date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-	link = container.find('a', {"href" : True})
-
 
 
 	if message.content =='!news':
+
+		container = containers[0]
+		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+		date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+		link = container.find('a', {"href" : True})
+
+
 		if len(title) > 0:
 			await message.channel.send(title)
 			#print(title)
@@ -105,6 +110,13 @@ async def on_message(message):
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
 	if message.content == '!patch':
+
+		container = containers[0]
+		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+		date = container.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+		link = container.find('a', {"href" : True})
+
 
 		patchTitles = []
 		descriptionP = []
@@ -140,8 +152,11 @@ async def on_message(message):
 	
 
 @client.command()
-async def quit(ctx):
-    sys.exit()
+async def quit(close):
+	if close.content == '!quit':
+		await message.channel.send(closing)
+		client.close()
+    #sys.exit()
 #@client.command()
 #async def hello(ctx, arg):
 #	await ctx.send(arg)
