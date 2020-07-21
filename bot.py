@@ -54,8 +54,8 @@ async def autoNews():
 	channel = client.get_channel(733918383803727922)
 	prevTitle = title
 	while(True):
-		newContainer = containers[0]
-
+		new = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
+		newContainer = new[0]
 		#await channel.send('error2')
 		if prevTitle != newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
 		#await channel.send('error1')
@@ -89,7 +89,7 @@ async def on_message(message):
 
 
 	if message.content =='!news':
-
+		containers = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		container = containers[0]
 		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
@@ -110,7 +110,7 @@ async def on_message(message):
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
 	if message.content == '!patch':
-
+		containers = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		container = containers[0]
 		title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 		description = container.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
