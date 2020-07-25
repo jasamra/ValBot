@@ -45,8 +45,8 @@ async def on_ready():
 
 async def autoNews():
 	await client.wait_until_ready()
-	cont = containers[1]
-
+	
+	cont = containers[0]
 	title = cont.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 	description = cont.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 	date = cont.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
@@ -65,16 +65,16 @@ async def autoNews():
 			link = newContainer.find('a', {"href" : True})
 			prevTitle = title
 
-			if len(title) > 0:
-				await channel.send(title)
+		
+			await channel.send(title)
 				#print(title)
-				await channel.send(date)
+			await channel.send(date)
 				#print(f'	{date}')
-				await channel.send(description)
+			await channel.send(description)
 				#print(f'	{description}\n')	
-				if 'href' in link.attrs:
+			if 'href' in link.attrs:
 
-					await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
+				await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
 					#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
 
@@ -97,16 +97,16 @@ async def on_message(message):
 		link = container.find('a', {"href" : True})
 
 
-		if len(title) > 0:
-			await message.channel.send(title)
+		
+		await message.channel.send(title)
 			#print(title)
-			await message.channel.send(date)
+		await message.channel.send(date)
 			#print(f'	{date}')
-			await message.channel.send(description)
+		await message.channel.send(description)
 			#print(f'	{description}\n')	
-			if 'href' in link.attrs:
+		if 'href' in link.attrs:
 
-				await message.channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
+			await message.channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
 	if message.content == '!patch':
@@ -148,19 +148,6 @@ async def on_message(message):
 
 #@tasks.loop(seconds = 10)
 #async def check_for_news():	
-
-	
-
-@client.command()
-async def quit(close):
-	if close.content == '!quit':
-		await message.channel.send(closing)
-		client.close()
-    #sys.exit()
-#@client.command()
-#async def hello(ctx, arg):
-#	await ctx.send(arg)
-
 
 	
 
