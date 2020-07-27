@@ -24,6 +24,13 @@ links = page_soup.findAll('a',{"href" : True})
 
 client = commands.Bot(command_prefix = '!')
 
+containers = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
+cont = containers[0]
+title = cont.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+description = cont.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
+date = cont.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
+link = cont.find('a', {"href" : True})
+
 container = containers[0]
 
 
@@ -45,27 +52,23 @@ async def on_ready():
 
 async def autoNews():
 	await client.wait_until_ready()
-	
-	cont = containers[0]
+	channel = client.get_channel(735223239676002360)
 	title = cont.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-	description = cont.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
-	date = cont.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
-	link = cont.find('a', {"href" : True})
-	channel = client.get_channel(733918383803727922)
 	prevTitle = title
-	while(True):
+	
+	while not client.is_closed():
 		new = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		newContainer = new[0]
-		#await channel.send('error2')
+	
 		if prevTitle != newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
+			
 		#await channel.send('error1')
 			title = newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 			description = newContainer.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 			date = newContainer.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 			link = newContainer.find('a', {"href" : True})
-			prevTitle = title
-
-		
+			
+			
 			await channel.send(title)
 				#print(title)
 			await channel.send(date)
@@ -77,7 +80,7 @@ async def autoNews():
 				await channel.send(f"https://playvalorant.com{str(link.attrs['href'])}")		
 					#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 
-
+			prevTitle = title		
 
 
 		await asyncio.sleep(10)
