@@ -79,8 +79,14 @@ async def autoNews():
 				#print(f'	{description}\n')	
 			if 'href' in link.attrs:
 
-				await channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")			
-					#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+				if str(link.attrs['href'].startswith('https://playvalorant.com')):
+
+					await message.channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
+					
+				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+				else:
+
+					await message.channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")
 
 			prevTitle = title		
 
@@ -122,8 +128,14 @@ async def on_message(message):
 			#print(f'	{description}\n')	
 		if 'href' in link.attrs:
 
-			await message.channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")		
+			if str(link.attrs['href'].startswith('https://playvalorant.com')):
+
+				await message.channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
+					
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+			else:
+
+				await message.channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")
 
 	if message.content == '!patch':
 		my_url = 'https://playvalorant.com/en-us/news/'
@@ -183,4 +195,8 @@ async def on_message(message):
 client.loop.create_task(autoNews())
 
 
-client.run('NzMzMTg4MjUzNTIzNjQwMzMx.Xw_gxQ.RYM0OU3UmpZyIY83yeHO-Ye2de8')
+
+
+
+
+client.run('')
