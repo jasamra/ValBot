@@ -79,7 +79,7 @@ async def autoNews():
 				#print(f'	{description}\n')	
 			if 'href' in link.attrs:
 
-				if str(link.attrs['href'].startswith('https://playvalorant.com')):
+				if link.attrs['href'].startswith('https://www.youtube.com'):
 
 					await message.channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
 					
@@ -128,7 +128,7 @@ async def on_message(message):
 			#print(f'	{description}\n')	
 		if 'href' in link.attrs:
 
-			if str(link.attrs['href'].startswith('https://playvalorant.com')):
+			if link.attrs['href'].startswith('https://www.youtube.com'):
 
 				await message.channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
 					
