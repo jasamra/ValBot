@@ -20,7 +20,7 @@ page_soup = soup(page_html, "html.parser")
 #grabs
 containers = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		
-container = containers[0]
+container = containers[1]
 
 
 
@@ -28,6 +28,7 @@ container = containers[0]
 @client.event
 async def on_ready():
 	print('Bot')
+	client.loop.create_task(autoNews())
 	
 	
 #@tasks.loop(seconds = 1)
@@ -45,8 +46,10 @@ async def autoNews():
 	channel = client.get_channel(733918383803727922)
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 	prevTitle = title
+
 	
 	while not client.is_closed():
+
 
 		my_url = 'https://playvalorant.com/en-us/news/'
 		#opening connection/grabbing the page
@@ -81,17 +84,17 @@ async def autoNews():
 
 				if link.attrs['href'].startswith('https://www.youtube.com'):
 
-					await message.channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
+					await channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
 					
 				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
 				else:
 
-					await message.channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")
+					await channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")
 
 			prevTitle = title		
 
 
-		await asyncio.sleep(120)
+		await asyncio.sleep(10)
 
 @client.event
 async def on_message(message):
@@ -186,17 +189,6 @@ async def on_message(message):
 		if 'href' in linksP[0].attrs:
 				await message.channel.send(f"{patchTitles[0]}\n{datesP[0]}\n{descriptionP[0]}\nhttps://playvalorant.com{str(linksP[0].attrs['href'])}")		
 			#print(f"https://playvalorant.com{str(linksP[0].attrs['href'])} \n")
-
-#@tasks.loop(seconds = 10)
-#async def check_for_news():	
-
-	
-
-client.loop.create_task(autoNews())
-
-
-
-
 
 
 client.run('')
