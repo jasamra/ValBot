@@ -20,7 +20,7 @@ page_soup = soup(page_html, "html.parser")
 #grabs
 containers = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		
-container = containers[1]
+container = containers[0]
 
 
 
@@ -45,7 +45,12 @@ async def autoNews():
 	#await client.wait_until_ready()
 	channel = client.get_channel(733918383803727922)
 	title = container.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
-	prevTitle = title
+	#f = open ("fileH.txt", "a+")
+	#f.truncate(0)
+	#f.write(title)
+	#f.close()
+
+	#prevTitle = title
 
 	
 	while not client.is_closed():
@@ -64,37 +69,38 @@ async def autoNews():
 		
 		new = page_soup.findAll("div",{"class":"NewsArchive-module--newsCardWrapper--2OQiG"})
 		newContainer = new[0]
-	
-		if prevTitle != newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip():
-			
-		#await channel.send('error1')
+
+		f = open ("fileH.txt", "a+")
+		f.seek(0)
+		updated_title = newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
+		print(updated_title)
+		print(f.read())
+		f.seek(0)
+		
+		if f.read() != updated_title:
+
 			title = newContainer.find('h5',{"class" : "heading-05 NewsCard-module--title--1MoLu"}).text.strip()
 			description = newContainer.find('p',{"class" : "copy-02 NewsCard-module--description--3sFiD"}).text.strip()
 			date = newContainer.find('p',{"class" : "NewsCard-module--published--37jmR"}).text.strip()
 			link = newContainer.find('a', {"href" : True})
-			
-			
-			#await channel.send(title)
-				#print(title)
-			#await channel.send(date)
-				#print(f'	{date}')
-			#await channel.send(description)
-				#print(f'	{description}\n')	
+	
 			if 'href' in link.attrs:
 
 				if link.attrs['href'].startswith('https://www.youtube.com'):
 
 					await channel.send(f"{title}\n{date}\n{description}\n{str(link.attrs['href'])}")
-					
-				#print(f"https://playvalorant.com{str(link.attrs['href'])} \n")
+
 				else:
 
 					await channel.send(f"{title}\n{date}\n{description}\nhttps://playvalorant.com{str(link.attrs['href'])}")
+			f.truncate(0)
+			f.write(updated_title)
+	
+			
+		f.close()		
 
-			prevTitle = title		
 
-
-		await asyncio.sleep(10)
+		await asyncio.sleep(1740)
 
 @client.event
 async def on_message(message):
